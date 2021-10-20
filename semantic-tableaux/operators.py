@@ -54,12 +54,12 @@ class BinaryOperator(Expr, Operator, ABC):
     """
 
     def __init__(self, op_name: str, left_expr: Expr, right_expr: Expr):
-        self.op_name = op_name
+        self.name = op_name
         self.left_expr = left_expr
         self.right_expr = right_expr
 
     def __str__(self):
-        return "%s(%s, %s)" % (self.op_name.upper(), str(self.left_expr), str(self.right_expr))
+        return "%s(%s, %s)" % (self.name.upper(), str(self.left_expr), str(self.right_expr))
 
     def __repr__(self):
         return self.__str__()

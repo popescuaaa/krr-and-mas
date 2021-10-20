@@ -32,19 +32,19 @@ class TreeNode:
 
         return conflict
 
-    @staticmethod
-    def add_node(value: List[Expr] or None, target: 'TreeNode') -> bool:
-        if target.left is None:
-            target.left = TreeNode(parent=target, value=value)
-            return True
-        elif target.right is None:
-            target.right = TreeNode(parent=target, value=value)
+    def add_node(self, value: List[Expr] or None) -> bool:
+        if self.right is None:
+            self.right = TreeNode(parent=self, value=value)
             return True
 
-        if target.add_node(value=value, target=target.left):
+        if self.left is None:
+            self.left = TreeNode(parent=self, value=value)
             return True
 
-        if target.add_node(value=value, target=target.right):
+        if self.left.add_node(value=value):
+            return True
+
+        if self.left.add_node(value=value):
             return True
 
         return False
@@ -53,6 +53,9 @@ class TreeNode:
 def log(root: TreeNode or None):
     if root is not None:
         if root.value is not None:
-            print(root.value)
+            if root.parent is not None:
+                print('{} -> {}'.format(root.parent.value, root.value))
+            else:
+                print('0 -> {}'.format(root.value))
         log(root.left)
         log(root.right)
