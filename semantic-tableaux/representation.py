@@ -47,8 +47,8 @@ if __name__ == "__main__":
     expr3 = Implies(Proposition("d", True), Proposition("pfd", False))
     expr4 = And(Proposition("s", True), Proposition("pfd", False))
 
-    # semantic_tableaux = SemanticTableaux([expr1, expr2, expr3, expr4])
-    # print(semantic_tableaux.get_result())
+    semantic_tableaux = SemanticTableaux([expr1, expr2, expr3, expr4])
+    print(semantic_tableaux.get_result()[0])
 
     # Test 3:
     """
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     expr6 = Proposition("bha", True)
 
     # semantic_tableaux = SemanticTableaux([expr1, expr2, expr3, expr4, expr5, expr6])
-    # print(semantic_tableaux.get_result())
+    # print(semantic_tableaux.get_result()[1][0])
 
     # Test 3
     """
@@ -82,8 +82,8 @@ if __name__ == "__main__":
     expr3 = Equivalent(Proposition("dary", True), Proposition("yl", True))
     expr4 = And(Proposition("y", True), Proposition("dary", True))
 
-    semantic_tableaux = SemanticTableaux([expr1, expr2, expr3, expr4])
-    print(semantic_tableaux.get_result())
+    # semantic_tableaux = SemanticTableaux([expr1, expr2, expr3, expr4])
+    # print(semantic_tableaux.get_result())
 
     # Test 4:
     """

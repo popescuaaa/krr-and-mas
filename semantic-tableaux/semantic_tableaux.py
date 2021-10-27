@@ -39,117 +39,31 @@ def expand(node: Tree):
                          )
                 ])
 
-            elif isinstance(e, Implies):
+            elif isinstance(e, Proposition):
                 node.data.remove(e)
-                node.addChildren([
-                    Tree(data=([_expr for _expr in node.data] +
-                               [e.left_expr.negate()])
-                         ),
-                    Tree(data=([_expr for _expr in node.data] +
-                               [e.right_expr])
-                         )
-                ])
-
-            elif isinstance(e, Equivalent):
-                node.data.remove(e)
-                node.addChildren([
-                    Tree(data=([_expr for _expr in node.data] +
-                               [And(e.left_expr, e.right_expr)])
-                         ),
-                    Tree(data=([_expr for _expr in node.data] +
-                               [And(e.left_expr.negate(), e.right_expr.negate())])
-                         )
-                ])
+                node.data.append(e.simplify())
 
             elif isinstance(e, And):
                 node.data.remove(e)
-                node.addChild(
-                    Tree(data=([_expr for _expr in node.data] +
-                               [e.left_expr, e.right_expr])
-                         )
-                )
+                node.data.append(e.left_expr)
+                node.data.append(e.right_expr)
+
             else:
-                continue
+                node.data.remove(e)
+                node.data.append(e.simplify())
 
 
 class SemanticTableaux:
     def __init__(self, expressions: List[Expr]):
         self.expressions = expressions
         self.result = NON_SATISFIABLE
-        self.example = None  # example of values which can be a solution
+        self.example = []  # example of values which can be a solution
         self.unresolved = deepcopy(expressions)
 
         self.root = Tree(data=expressions)  # root
         self.build()
 
     def build(self) -> None:
-        # Trunks
-        for expr in self.root.data:
-            if isinstance(expr, And):
-                self.root.data.remove(expr)
-                self.root.addChild(
-                    Tree(data=([_expr for _expr in self.root.data] +
-                               [expr.left_expr, expr.right_expr]))
-                )
-
-        # Negation and parenthesis
-        for expr in self.root.data:
-            if isinstance(expr, Not):
-
-                if isinstance(expr.expression, Proposition):
-                    # self.root.data.remove(expr)
-                    # self.root.addChild(
-                    #     Tree(data=([_expr for _expr in self.root.data] +
-                    #                [expr.expression.negate()]))
-                    # )
-                    continue
-
-                # Trunk
-                elif isinstance(expr.expression, Or):
-                    self.root.data.remove(expr)
-                    self.root.addChild(
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [expr.expression.left_expr.negate(),
-                                    expr.expression.right_expr.negate()])
-                             )
-                    )
-
-                # Sub-branching with negation
-                elif isinstance(expr.expression, Implies):
-                    self.root.data.remove(expr)
-                    self.root.addChild(
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [expr.expression.left_expr,
-                                    expr.expression.right_expr.negate()])
-                             )
-                    )
-
-                elif isinstance(expr.expression, Equivalent):
-                    self.root.data.remove(expr)
-                    self.root.addChildren([
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [And(expr.expression.left_expr, expr.expression.right_expr.negate())])
-                             ),
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [And(expr.expression.left_expr.negate(), expr.expression.right_expr)])
-                             )
-                    ])
-
-                elif isinstance(expr.expression, And):
-                    self.root.data.remove(expr)
-                    self.root.addChildren([
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [expr.expression.left_expr.negate()])
-                             ),
-                        Tree(data=([_expr for _expr in self.root.data] +
-                                   [expr.expression.right_expr.negate()])
-                             )
-                    ])
-
-                else:
-                    continue
-
-        # Branching and checking
         expansion_queue = [self.root]
         expansion_list = [self.root]
 
@@ -180,14 +94,13 @@ class SemanticTableaux:
 
         ok_leaves = []
         for c in leaves:
-            print(c)
-            print(has_conflict(c))
             if has_conflict(c):
                 continue
             else:
                 ok_leaves.append(c)
+                self.example.append(c.data)
 
         if len(ok_leaves) == 0:
-            return NON_SATISFIABLE
+            return NON_SATISFIABLE, self.example
         else:
-            return SATISFIABLE
+            return SATISFIABLE, self.example
