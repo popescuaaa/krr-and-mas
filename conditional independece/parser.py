@@ -1,89 +1,183 @@
 class Parser(object):
-	@staticmethod
-	def parse(file: str):
-		'''
-		@param file: path to the input file
-		:returns Bayesian network as a dictionary {node: [list of parents], ...}
-		and the list of queries as [{"X": [list of vars], 
-		"Y": [list of vars], "Z": [list of vars]}, ... ] where we want 
-		to test the conditional independence of vars1 ⊥ vars2 | cond 
-		'''
-		bn = {}
-		queries = []
+    @staticmethod
+    def parse(file: str):
+        '''
+        @param file: path to the input file
+        :returns Bayesian network as a dictionary {node: [list of parents], ...}
+        and the list of queries as [{"X": [list of vars],
+        "Y": [list of vars], "Z": [list of vars]}, ... ] where we want
+        to test the conditional independence of vars1 ⊥ vars2 | cond
+        '''
+        bn = {}
+        queries = []
 
-		with open(file) as fin:
-			# read the number of vars involved
-			# and the number of queries
-			N, M = [int(x) for x in next(fin).split()]
-			
-			# read the vars and their parents
-			for i in range(N):
-				line = next(fin).split()
-				var, parents = line[0], line[1:]
-				bn[var] = parents
+        with open(file) as fin:
+            # read the number of vars involved
+            # and the number of queries
+            N, M = [int(x) for x in next(fin).split()]
 
-			# read the queries
-			for i in range(M):
-				vars, cond = next(fin).split('|')
+            # read the vars and their parents
+            for i in range(N):
+                line = next(fin).split()
+                var, parents = line[0], line[1:]
+                bn[var] = parents
 
-				# parse vars
-				X, Y = vars.split(';')
-				X = X.split()
-				Y = Y.split()
+            # read the queries
+            for i in range(M):
+                vars, cond = next(fin).split('|')
 
-				# parse cond
-				Z = cond.split()
+                # parse vars
+                X, Y = vars.split(';')
+                X = X.split()
+                Y = Y.split()
 
-				queries.append({
-					"X": X,
-					"Y": Y,
-					"Z": Z
-				})
+                # parse cond
+                Z = cond.split()
 
-			# read the answers
-			for i in range(M):
-				queries[i]["answer"] = next(fin).strip()
+                queries.append({
+                    "X": X,
+                    "Y": Y,
+                    "Z": Z
+                })
 
-		return bn, queries
+            # read the answers
+            for i in range(M):
+                queries[i]["answer"] = next(fin).strip()
 
-	@staticmethod
-	def get_graph(bn: dict):
-		'''
-		@param bn: Bayesian netowrk obtained from parse
-		:returns the graph as {node: [list of children], ...}
-		'''
-		graph = {}
+        return bn, queries
 
-		for node in bn:
-			parents = bn[node]
+    @staticmethod
+    def get_graph(bn: dict):
+        '''
+        @param bn: Bayesian netowrk obtained from parse
+        :returns the graph as {node: [list of children], ...}
+        '''
+        graph = {}
 
-			# this is for the leafs
-			if node not in graph:
-				graph[node] = []
+        for node in bn:
+            parents = bn[node]
 
-			# for each parent add 
-			# the edge parent->node
-			for p in parents:
-				if p not in graph:
-					graph[p] = []
-				graph[p].append(node)
+            # this is for the leafs
+            if node not in graph:
+                graph[node] = []
 
-		return graph
+            # for each parent add
+            # the edge parent->node
+            for p in parents:
+                if p not in graph:
+                    graph[p] = []
+                graph[p].append(node)
 
+        return graph
+
+
+def read():
+    with open("bn1") as f:
+        content = [x.strip() for x in f.readlines()]
+
+    parents = {}
+    inv_parents = {}
+
+    [n, m] = content[0].split(" ")
+    n, m = int(n), int(m)
+
+    for i in range(1, n + 1):
+        nodes = content[i].split(" ")
+        parents[nodes[0]] = []
+        inv_parents[nodes[0]] = inv_parents.get(nodes[0], [])
+        for j in range(1, len(nodes)):
+            parents[nodes[0]].append(nodes[j])
+            inv_parents[nodes[j]] = inv_parents.get(nodes[j], [])
+            inv_parents[nodes[j]].append(nodes[0])
+
+    return n, m, parents, inv_parents, content
+
+
+def dfs(node, X, Y, curr_path, p, inv_p):
+    curr_path = curr_path.copy()
+    curr_path.append(node)
+
+    if node in Y:
+        return [curr_path]
+
+    result = []
+
+    for v in p[node]:
+        if v not in curr_path and not v in X:
+            result.extend(dfs(v, X, Y, curr_path, p, inv_p))
+
+    for v in inv_p[node]:
+        if v not in curr_path and not v in X:
+            result.extend(dfs(v, X, Y, curr_path, p, inv_p))
+
+    return result
+
+
+def path_active_given_z(path, parents, Z):
+    for i in range(len(path) - 2):
+        prev = path[i]
+        curr = path[i + 1]
+        next = path[i + 2]
+
+        active_causal = False
+        active_evidential = False
+        active_cause = False
+        active_effect = False
+
+        if prev in parents[curr] and curr in parents[next] and curr not in Z:
+            active_causal = True
+        if curr in parents[prev] and next in parents[curr] and curr not in Z:
+            active_evidential = True
+        if curr in parents[prev] and curr in parents[next] and curr not in Z:
+            active_cause = True
+        if prev in parents[curr] and next in parents[curr] and curr in Z:
+            active_effect = True
+
+        if not active_causal and not active_evidential and not active_cause and not active_effect:
+            return False
+
+    return True
+
+
+def run_inferences(n, m, parents, inv_parents, content):
+    for i in range(n + 1, n + m + 1):
+        [X, Y_Z] = content[i].split(';')
+        X = list(filter(None, X.split(' ')))
+        [Y, Z] = Y_Z.split('|')
+        Y = list(filter(None, Y.split(' ')))
+        Z = list(filter(None, Z.split(' ')))
+
+        a_to_b_paths = []
+        for x in X:
+            a_to_b_paths.extend(dfs(x, X, Y, [], parents, inv_parents))
+
+        is_active = False
+        for path in a_to_b_paths:
+            if path_active_given_z(path, parents, Z):
+                is_active = True
+                break
+        if is_active:
+            print("false")
+        else:
+            print("true")
 
 
 if __name__ == "__main__":
-	from pprint import pprint
-	
-	# example usage
-	bn, queries = Parser.parse("bn1")
-	graph = Parser.get_graph(bn)
-	
-	print("Bayesian Network\n" + "-" * 50)
-	pprint(bn)
+    from pprint import pprint
 
-	print("\nQueries\n" + "-" * 50)
-	pprint(queries)
+    # example usage
+    bn, queries = Parser.parse("bn1")
+    graph = Parser.get_graph(bn)
 
-	print("\nGraph\n" + "-" * 50)
-	pprint(graph)
+    print("Bayesian Network\n" + "-" * 50)
+    pprint(bn)
+
+    print("\nQueries\n" + "-" * 50)
+    pprint(queries)
+
+    print("\nGraph\n" + "-" * 50)
+    pprint(graph)
+
+    n, m, parents, inv_parents, content = read()
+    run_inferences(n, m, parents, inv_parents, content)
+
