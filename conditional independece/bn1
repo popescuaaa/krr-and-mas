@@ -1,0 +1,22 @@
+5 8
+A
+B
+C A B
+D C B
+E C
+A B ; E |
+A B ; E | C
+E ; D |
+E ; D | B
+E ; D | C
+A ; B |
+A ; B | C
+A ; B | D
+false
+true
+false
+false
+true
+true
+false
+false

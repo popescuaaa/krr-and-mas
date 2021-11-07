@@ -31,10 +31,10 @@ def expand(node: Tree):
             if isinstance(e, Or):
                 node.data.remove(e)
                 node.addChildren([
-                    Tree(data=([_expr for _expr in node.data] +
+                    Tree(data=(node.data +
                                [e.left_expr])
                          ),
-                    Tree(data=([_expr for _expr in node.data] +
+                    Tree(data=(node.data +
                                [e.right_expr])
                          )
                 ])
