@@ -1,13 +1,14 @@
 class Parser(object):
     @staticmethod
     def parse(file: str):
-        '''
+        """
         @param file: path to the input file
         :returns Bayesian network as a dictionary {node: [list of parents], ...}
         and the list of queries as [{"X": [list of vars],
         "Y": [list of vars], "Z": [list of vars]}, ... ] where we want
         to test the conditional independence of vars1 ⊥ vars2 | cond
-        '''
+        """
+
         bn = {}
         queries = []
 
@@ -54,8 +55,11 @@ class Parser(object):
         '''
         graph = {}
 
+        _parents = {}  # invereted bn
+
         for node in bn:
             parents = bn[node]
+            _parents[node] = parents
 
             # this is for the leafs
             if node not in graph:
@@ -68,32 +72,10 @@ class Parser(object):
                     graph[p] = []
                 graph[p].append(node)
 
-        return graph
+        return graph, _parents
 
 
-def read():
-    with open("bn1") as f:
-        content = [x.strip() for x in f.readlines()]
-
-    parents = {}
-    inv_parents = {}
-
-    [n, m] = content[0].split(" ")
-    n, m = int(n), int(m)
-
-    for i in range(1, n + 1):
-        nodes = content[i].split(" ")
-        parents[nodes[0]] = []
-        inv_parents[nodes[0]] = inv_parents.get(nodes[0], [])
-        for j in range(1, len(nodes)):
-            parents[nodes[0]].append(nodes[j])
-            inv_parents[nodes[j]] = inv_parents.get(nodes[j], [])
-            inv_parents[nodes[j]].append(nodes[0])
-
-    return n, m, parents, inv_parents, content
-
-
-def dfs(node, X, Y, curr_path, p, inv_p):
+def dfs(node, X, Y, curr_path, parents, graph):
     curr_path = curr_path.copy()
     curr_path.append(node)
 
@@ -102,13 +84,13 @@ def dfs(node, X, Y, curr_path, p, inv_p):
 
     result = []
 
-    for v in p[node]:
+    for v in parents[node]:
         if v not in curr_path and not v in X:
-            result.extend(dfs(v, X, Y, curr_path, p, inv_p))
+            result.extend(dfs(v, X, Y, curr_path, parents, graph))
 
-    for v in inv_p[node]:
+    for v in graph[node]:
         if v not in curr_path and not v in X:
-            result.extend(dfs(v, X, Y, curr_path, p, inv_p))
+            result.extend(dfs(v, X, Y, curr_path, parents, graph))
 
     return result
 
@@ -139,27 +121,24 @@ def path_active_given_z(path, parents, Z):
     return True
 
 
-def run_inferences(n, m, parents, inv_parents, content):
-    for i in range(n + 1, n + m + 1):
-        [X, Y_Z] = content[i].split(';')
-        X = list(filter(None, X.split(' ')))
-        [Y, Z] = Y_Z.split('|')
-        Y = list(filter(None, Y.split(' ')))
-        Z = list(filter(None, Z.split(' ')))
+def run_inferences(query, parents, graph):
+    X = query["X"]
+    Y = query["Y"]
+    Z = query["Z"]
 
-        a_to_b_paths = []
-        for x in X:
-            a_to_b_paths.extend(dfs(x, X, Y, [], parents, inv_parents))
+    a_to_b_paths = []
+    for x in X:
+        a_to_b_paths.extend(dfs(x, X, Y, [], parents, graph))
 
-        is_active = False
-        for path in a_to_b_paths:
-            if path_active_given_z(path, parents, Z):
-                is_active = True
-                break
-        if is_active:
-            print("false")
-        else:
-            print("true")
+    is_active = False
+    for path in a_to_b_paths:
+        if path_active_given_z(path, parents, Z):
+            is_active = True
+            break
+    if is_active:
+        print("false")
+    else:
+        print("true")
 
 
 if __name__ == "__main__":
@@ -167,17 +146,19 @@ if __name__ == "__main__":
 
     # example usage
     bn, queries = Parser.parse("bn1")
-    graph = Parser.get_graph(bn)
+    graph, p = Parser.get_graph(bn)
 
-    print("Bayesian Network\n" + "-" * 50)
-    pprint(bn)
+    # print("Bayesian Network\n" + "-" * 50)
+    # pprint(bn)
+    #
+    # print("\nQueries\n" + "-" * 50)
+    # pprint(queries)
+    #
+    # print("\nGraph\n" + "-" * 50)
+    # pprint(graph)
 
-    print("\nQueries\n" + "-" * 50)
-    pprint(queries)
-
-    print("\nGraph\n" + "-" * 50)
-    pprint(graph)
-
-    n, m, parents, inv_parents, content = read()
-    run_inferences(n, m, parents, inv_parents, content)
+    for q in queries:
+        print("\nQuery\n" + "-" * 50)
+        pprint(q)
+        run_inferences(q, p, graph)
 
