@@ -4,6 +4,6 @@
 - Here we analyze the [Conditional Independence](https://en.wikipedia.org/wiki/Conditional_independence)
 
 Todo:
-- [ ] Add new function to the parser which mimic read
-- [ ] Look through the code and add comments
-- [ ] Send code
+- [x] Add new function to the parser which mimic read
+- [x] Look through the code and add comments
+- [x] Send code
