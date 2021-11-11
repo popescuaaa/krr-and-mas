@@ -155,7 +155,8 @@
                                                   ) ;
                                rdf:type owl:Class
                              ] ;
-         rdfs:subClassOf [ owl:intersectionOf ( :Person
+         rdfs:subClassOf :Person ,
+                         [ owl:intersectionOf ( :Person
                                                 [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
                                                                          owl:onProperty :hasSibling ;
                                                                          owl:someValuesFrom :Person
@@ -169,6 +170,21 @@
                                                 ]
                                               ) ;
                            rdf:type owl:Class
+                         ] ,
+                         [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                  owl:onProperty :hasSibling ;
+                                                  owl:someValuesFrom :Person
+                                                ]
+                                                [ rdf:type owl:Restriction ;
+                                                  owl:onProperty :hasSex ;
+                                                  owl:hasValue :MaleSex
+                                                ]
+                                              ) ;
+                           rdf:type owl:Class
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasSibling ;
+                           owl:someValuesFrom :Person
                          ] .
 
 
@@ -190,7 +206,8 @@
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf :Person ,
+        rdfs:subClassOf :Male ,
+                        :Person ,
                         [ owl:intersectionOf ( :Person
                                                [ rdf:type owl:Class ;
                                                  owl:unionOf ( :Aunt
@@ -206,6 +223,18 @@
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Class ;
+                          owl:unionOf ( :Aunt
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty :hasParent ;
+                                          owl:someValuesFrom :Uncle
+                                        ]
+                                      )
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSex ;
+                          owl:hasValue :MaleSex
                         ] .
 
 
@@ -223,7 +252,9 @@
                                                    ) ;
                                 rdf:type owl:Class
                               ] ;
-          rdfs:subClassOf [ owl:intersectionOf ( :Person
+          rdfs:subClassOf :Female ,
+                          :Person ,
+                          [ owl:intersectionOf ( :Person
                                                  [ rdf:type owl:Restriction ;
                                                    owl:onProperty :hasParent ;
                                                    owl:someValuesFrom :Person
@@ -234,6 +265,22 @@
                                                  ]
                                                ) ;
                             rdf:type owl:Class
+                          ] ,
+                          [ rdf:type owl:Class ;
+                            owl:unionOf ( :Daughter
+                                          [ rdf:type owl:Restriction ;
+                                            owl:onProperty :hasParent ;
+                                            owl:someValuesFrom :Son
+                                          ]
+                                        )
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasParent ;
+                            owl:someValuesFrom :Person
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasSex ;
+                            owl:hasValue :FemaleSex
                           ] .
 
 
@@ -251,7 +298,9 @@
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf [ owl:intersectionOf ( :Person
+        rdfs:subClassOf :Male ,
+                        :Person ,
+                        [ owl:intersectionOf ( :Person
                                                [ rdf:type owl:Restriction ;
                                                  owl:onProperty :hasChild ;
                                                  owl:someValuesFrom :Person
@@ -262,6 +311,14 @@
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasChild ;
+                          owl:someValuesFrom :Person
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSex ;
+                          owl:hasValue :MaleSex
                         ] .
 
 
@@ -298,7 +355,9 @@
                                                       ) ;
                                    rdf:type owl:Class
                                  ] ;
-             rdfs:subClassOf [ owl:intersectionOf ( :Person
+             rdfs:subClassOf :Male ,
+                             :Person ,
+                             [ owl:intersectionOf ( :Person
                                                     [ rdf:type owl:Restriction ;
                                                       owl:onProperty :hasChild ;
                                                       owl:someValuesFrom [ owl:intersectionOf ( :Person
@@ -316,6 +375,25 @@
                                                     ]
                                                   ) ;
                                rdf:type owl:Class
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom :Person
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                         [ rdf:type owl:Restriction ;
+                                                                           owl:onProperty :hasChild ;
+                                                                           owl:someValuesFrom :Person
+                                                                         ]
+                                                                       ) ;
+                                                    rdf:type owl:Class
+                                                  ]
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasSex ;
+                               owl:hasValue :MaleSex
                              ] .
 
 
@@ -340,7 +418,9 @@
                                                       ) ;
                                    rdf:type owl:Class
                                  ] ;
-             rdfs:subClassOf [ owl:intersectionOf ( :Person
+             rdfs:subClassOf :Female ,
+                             :Person ,
+                             [ owl:intersectionOf ( :Person
                                                     [ rdf:type owl:Restriction ;
                                                       owl:onProperty :hasChild ;
                                                       owl:someValuesFrom [ owl:intersectionOf ( :Person
@@ -358,6 +438,25 @@
                                                     ]
                                                   ) ;
                                rdf:type owl:Class
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom :Person
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                         [ rdf:type owl:Restriction ;
+                                                                           owl:onProperty :hasChild ;
+                                                                           owl:someValuesFrom :Person
+                                                                         ]
+                                                                       ) ;
+                                                    rdf:type owl:Class
+                                                  ]
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasSex ;
+                               owl:hasValue :FemaleSex
                              ] .
 
 
@@ -378,7 +477,8 @@
                                                       ) ;
                                    rdf:type owl:Class
                                  ] ;
-             rdfs:subClassOf [ owl:intersectionOf ( :Person
+             rdfs:subClassOf :Person ,
+                             [ owl:intersectionOf ( :Person
                                                     [ rdf:type owl:Restriction ;
                                                       owl:onProperty :hasChild ;
                                                       owl:someValuesFrom [ owl:intersectionOf ( :Person
@@ -392,6 +492,21 @@
                                                     ]
                                                   ) ;
                                rdf:type owl:Class
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom :Person
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasChild ;
+                               owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                         [ rdf:type owl:Restriction ;
+                                                                           owl:onProperty :hasChild ;
+                                                                           owl:someValuesFrom :Person
+                                                                         ]
+                                                                       ) ;
+                                                    rdf:type owl:Class
+                                                  ]
                              ] .
 
 
@@ -421,6 +536,14 @@
                                                    ]
                                                  ) ;
                               rdf:type owl:Class
+                            ] ,
+                            [ rdf:type owl:Class ;
+                              owl:unionOf ( :Daughter
+                                            [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasParent ;
+                                              owl:someValuesFrom :Son
+                                            ]
+                                          )
                             ] .
 
 
@@ -446,13 +569,19 @@
                                               ) ;
                            rdf:type owl:Class
                          ] ;
-     rdfs:subClassOf [ owl:intersectionOf ( :Person
+     rdfs:subClassOf :Male ,
+                     :Person ,
+                     [ owl:intersectionOf ( :Person
                                             [ rdf:type owl:Restriction ;
                                               owl:onProperty :hasSex ;
                                               owl:hasValue :MaleSex
                                             ]
                                           ) ;
                        rdf:type owl:Class
+                     ] ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty :hasSex ;
+                       owl:hasValue :MaleSex
                      ] .
 
 
@@ -475,7 +604,9 @@
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf [ owl:intersectionOf ( :Person
+        rdfs:subClassOf :Female ,
+                        :Person ,
+                        [ owl:intersectionOf ( :Person
                                                [ rdf:type owl:Restriction ;
                                                  owl:onProperty :hasChild ;
                                                  owl:someValuesFrom :Person
@@ -486,6 +617,14 @@
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasChild ;
+                          owl:someValuesFrom :Person
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSex ;
+                          owl:hasValue :FemaleSex
                         ] .
 
 
@@ -529,6 +668,29 @@
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                 owl:unionOf ( :Aunt
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty :hasParent ;
+                                                                 owl:someValuesFrom :Uncle
+                                                               ]
+                                                             )
+                                               ]
+                                               [ rdf:type owl:Restriction ;
+                                                 owl:onProperty :hasSex ;
+                                                 owl:hasValue :MaleSex
+                                               ]
+                                             ) ;
+                          rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Class ;
+                          owl:unionOf ( :Aunt
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty :hasParent ;
+                                          owl:someValuesFrom :Uncle
+                                        ]
+                                      )
                         ] .
 
 
@@ -572,6 +734,29 @@
                                               ]
                                             ) ;
                          rdf:type owl:Class
+                       ] ,
+                       [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Aunt
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasParent ;
+                                                                owl:someValuesFrom :Uncle
+                                                              ]
+                                                            )
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :FemaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ] ,
+                       [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
                        ] .
 
 
@@ -585,13 +770,18 @@
                                                     ) ;
                                  rdf:type owl:Class
                                ] ;
-           rdfs:subClassOf [ owl:intersectionOf ( :Person
+           rdfs:subClassOf :Person ,
+                           [ owl:intersectionOf ( :Person
                                                   [ rdf:type owl:Restriction ;
                                                     owl:onProperty :hasParent ;
                                                     owl:someValuesFrom :Person
                                                   ]
                                                 ) ;
                              rdf:type owl:Class
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasParent ;
+                             owl:someValuesFrom :Person
                            ] .
 
 
@@ -605,13 +795,18 @@
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf [ owl:intersectionOf ( :Person
+        rdfs:subClassOf :Person ,
+                        [ owl:intersectionOf ( :Person
                                                [ rdf:type owl:Restriction ;
                                                  owl:onProperty :hasChild ;
                                                  owl:someValuesFrom :Person
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasChild ;
+                          owl:someValuesFrom :Person
                         ] .
 
 
@@ -643,13 +838,18 @@
                                                   ) ;
                                rdf:type owl:Class
                              ] ;
-         rdfs:subClassOf [ owl:intersectionOf ( :Person
+         rdfs:subClassOf :Person ,
+                         [ owl:intersectionOf ( :Person
                                                 [ rdf:type owl:Restriction ;
                                                   owl:onProperty :hasSibling ;
                                                   owl:someValuesFrom :Person
                                                 ]
                                               ) ;
                            rdf:type owl:Class
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasSibling ;
+                           owl:someValuesFrom :Person
                          ] .
 
 
@@ -667,7 +867,9 @@
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf [ owl:intersectionOf ( :Person
+        rdfs:subClassOf :Female ,
+                        :Person ,
+                        [ owl:intersectionOf ( :Person
                                                [ rdf:type owl:Restriction ;
                                                  owl:onProperty :hasSibling ;
                                                  owl:someValuesFrom :Person
@@ -678,6 +880,14 @@
                                                ]
                                              ) ;
                           rdf:type owl:Class
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSibling ;
+                          owl:someValuesFrom :Person
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSex ;
+                          owl:hasValue :FemaleSex
                         ] .
 
 
@@ -695,7 +905,9 @@
                                               ) ;
                            rdf:type owl:Class
                          ] ;
-     rdfs:subClassOf [ owl:intersectionOf ( :Person
+     rdfs:subClassOf :Male ,
+                     :Person ,
+                     [ owl:intersectionOf ( :Person
                                             [ rdf:type owl:Restriction ;
                                               owl:onProperty :hasParent ;
                                               owl:someValuesFrom :Person
@@ -706,6 +918,14 @@
                                             ]
                                           ) ;
                        rdf:type owl:Class
+                     ] ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty :hasParent ;
+                       owl:someValuesFrom :Person
+                     ] ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty :hasSex ;
+                       owl:hasValue :MaleSex
                      ] .
 
 
@@ -730,7 +950,9 @@
                                                 ) ;
                              rdf:type owl:Class
                            ] ;
-       rdfs:subClassOf [ owl:intersectionOf ( :Person
+       rdfs:subClassOf :Male ,
+                       :Person ,
+                       [ owl:intersectionOf ( :Person
                                               [ rdf:type owl:Restriction ;
                                                 owl:onProperty :hasSibling ;
                                                 owl:someValuesFrom [ owl:intersectionOf ( :Person
@@ -748,6 +970,25 @@
                                               ]
                                             ) ;
                          rdf:type owl:Class
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
                        ] .
 
 
@@ -761,13 +1002,19 @@
                                                 ) ;
                              rdf:type owl:Class
                            ] ;
-       rdfs:subClassOf [ owl:intersectionOf ( :Person
+       rdfs:subClassOf :Female ,
+                       :Person ,
+                       [ owl:intersectionOf ( :Person
                                               [ rdf:type owl:Restriction ;
                                                 owl:onProperty :hasSex ;
                                                 owl:hasValue :FemaleSex
                                               ]
                                             ) ;
                          rdf:type owl:Class
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
                        ] .
 
 
@@ -777,6 +1024,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Balbo
 :Balbo rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
@@ -784,12 +1032,15 @@
                 ] ;
        :hasChild :Largo ,
                  :Lily ;
+       :hasGrandchild :Fosco ,
+                      :Marian ;
        :hasSex :MaleSex ;
        :hasAge 450 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Berylla
 :Berylla rdf:type owl:NamedIndividual ,
+                  :Adult ,
                   :Person ,
                   [ rdf:type owl:Restriction ;
                     owl:onProperty :hasChild ;
@@ -797,6 +1048,8 @@
                   ] ;
          :hasChild :Largo ,
                    :Lily ;
+         :hasGrandchild :Fosco ,
+                        :Marian ;
          :hasSex :FemaleSex ;
          :marriedTo :Balbo ;
          :hasAge 234 .
@@ -804,6 +1057,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Bilbo
 :Bilbo rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ;
        :hasSex :MaleSex ;
        :hasAge 998 .
@@ -811,6 +1065,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Daisy
 :Daisy rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
@@ -820,28 +1075,40 @@
                   owl:onProperty :hasParent ;
                   owl:someValuesFrom :Person
                 ] ;
+       :hasAunt :Dora ;
        :hasChild :Griffo_Boffin ;
        :hasParent :Dudo ;
        :hasSex :FemaleSex ;
+       :hasUncle :Drogo ;
        :marriedTo :Griffo_Boffin ;
        :hasAge 567 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Dora
 :Dora rdf:type owl:NamedIndividual ,
+               :Adult ,
                :Person ,
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasParent ;
                  owl:someValuesFrom :Person
+               ] ,
+               [ rdf:type owl:Restriction ;
+                 owl:onProperty :hasSibling ;
+                 owl:someValuesFrom :Person
                ] ;
+      :hasNephew :Frodo ;
+      :hasNiece :Daisy ;
       :hasParent :Fosco ,
                  :Ruby_Bolger ;
       :hasSex :FemaleSex ;
+      :hasSibling :Drogo ,
+                  :Dudo ;
       :hasAge 123 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Drogo
 :Drogo rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
@@ -850,16 +1117,24 @@
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasParent ;
                   owl:someValuesFrom :Person
+                ] ,
+                [ rdf:type owl:Restriction ;
+                  owl:onProperty :hasSibling ;
+                  owl:someValuesFrom :Person
                 ] ;
        :hasChild :Frodo ;
+       :hasNiece :Daisy ;
        :hasParent :Fosco ,
                   :Ruby_Bolger ;
        :hasSex :MaleSex ;
+       :hasSibling :Dora ,
+                   :Dudo ;
        :hasAge 123 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Dudo
 :Dudo rdf:type owl:NamedIndividual ,
+               :Adult ,
                :Person ,
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasChild ;
@@ -868,11 +1143,19 @@
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasParent ;
                  owl:someValuesFrom :Person
+               ] ,
+               [ rdf:type owl:Restriction ;
+                 owl:onProperty :hasSibling ;
+                 owl:someValuesFrom :Person
                ] ;
       :hasChild :Daisy ;
+      :hasGrandchild :Griffo_Boffin ;
+      :hasNephew :Frodo ;
       :hasParent :Fosco ,
                  :Ruby_Bolger ;
       :hasSex :MaleSex ;
+      :hasSibling :Dora ,
+                  :Drogo ;
       :hasAge 123 .
 
 
@@ -888,6 +1171,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Fosco
 :Fosco rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
@@ -897,9 +1181,12 @@
                   owl:onProperty :hasParent ;
                   owl:someValuesFrom :Person
                 ] ;
+       :hasAunt :Lily ;
        :hasChild :Dora ,
                  :Drogo ,
                  :Dudo ;
+       :hasGrandchild :Daisy ,
+                      :Frodo ;
        :hasParent :Largo ,
                   :Tanta ;
        :hasSex :MaleSex ;
@@ -908,19 +1195,23 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Frodo
 :Frodo rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasParent ;
                   owl:someValuesFrom :Person
                 ] ;
+       :hasAunt :Dora ;
        :hasParent :Drogo ,
                   :Primula_Brandybuck ;
        :hasSex :MaleSex ;
+       :hasUncle :Dudo ;
        :hasAge 123 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Griffo_Boffin
 :Griffo_Boffin rdf:type owl:NamedIndividual ,
+                        :Adult ,
                         :Person ,
                         [ rdf:type owl:Restriction ;
                           owl:onProperty :hasParent ;
@@ -933,6 +1224,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Largo
 :Largo rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
@@ -941,16 +1233,26 @@
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasParent ;
                   owl:someValuesFrom :Person
+                ] ,
+                [ rdf:type owl:Restriction ;
+                  owl:onProperty :hasSibling ;
+                  owl:someValuesFrom :Person
                 ] ;
        :hasChild :Fosco ;
+       :hasGrandchild :Dora ,
+                      :Drogo ,
+                      :Dudo ;
+       :hasNephew :Marian ;
        :hasParent :Balbo ,
                   :Berylla ;
        :hasSex :MaleSex ;
+       :hasSibling :Lily ;
        :hasAge 123 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Lily
 :Lily rdf:type owl:NamedIndividual ,
+               :Adult ,
                :Person ,
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasChild ;
@@ -959,11 +1261,17 @@
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasParent ;
                  owl:someValuesFrom :Person
+               ] ,
+               [ rdf:type owl:Restriction ;
+                 owl:onProperty :hasSibling ;
+                 owl:someValuesFrom :Person
                ] ;
       :hasChild :Marian ;
+      :hasNephew :Fosco ;
       :hasParent :Balbo ,
                  :Berylla ;
       :hasSex :FemaleSex ;
+      :hasSibling :Largo ;
       :marriedTo :Togo ;
       :hasAge 123 .
 
@@ -988,11 +1296,13 @@
         :hasParent :Lily ,
                    :Togo ;
         :hasSex :MaleSex ;
+        :hasUncle :Largo ;
         :hasAge 12 .
 
 
 ###  http://www.owl-ontologies.com/generations.owl#Primula_Brandybuck
 :Primula_Brandybuck rdf:type owl:NamedIndividual ,
+                             :Adult ,
                              :Person ,
                              [ rdf:type owl:Restriction ;
                                owl:onProperty :hasChild ;
@@ -1006,6 +1316,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Ruby_Bolger
 :Ruby_Bolger rdf:type owl:NamedIndividual ,
+                      :Adult ,
                       :Person ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty :hasChild ;
@@ -1014,6 +1325,8 @@
              :hasChild :Dora ,
                        :Drogo ,
                        :Dudo ;
+             :hasGrandchild :Daisy ,
+                            :Frodo ;
              :hasSex :FemaleSex ;
              :marriedTo :Fosco ;
              :hasAge 123 .
@@ -1021,12 +1334,16 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Tanta
 :Tanta rdf:type owl:NamedIndividual ,
+                :Adult ,
                 :Person ,
                 [ rdf:type owl:Restriction ;
                   owl:onProperty :hasChild ;
                   owl:someValuesFrom :Person
                 ] ;
        :hasChild :Fosco ;
+       :hasGrandchild :Dora ,
+                      :Drogo ,
+                      :Dudo ;
        :hasSex :FemaleSex ;
        :marriedTo :Largo ;
        :hasAge 123 .
@@ -1034,6 +1351,7 @@
 
 ###  http://www.owl-ontologies.com/generations.owl#Togo
 :Togo rdf:type owl:NamedIndividual ,
+               :Adult ,
                :Person ,
                [ rdf:type owl:Restriction ;
                  owl:onProperty :hasChild ;
@@ -1136,6 +1454,71 @@
                                               ]
                                               [ rdf:type owl:Restriction ;
                                                 owl:onProperty :hasSex ;
+                                                owl:hasValue :FemaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                           owl:unionOf ( :Aunt
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :hasParent ;
+                                                           owl:someValuesFrom :Uncle
+                                                         ]
+                                                       )
+                                         ]
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasSex ;
+                                           owl:hasValue :FemaleSex
+                                         ]
+                                       ) ;
+                    rdf:type owl:Class
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Aunt
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasParent ;
+                                                                owl:someValuesFrom :Uncle
+                                                              ]
+                                                            )
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :FemaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Class ;
+                    owl:unionOf ( :Aunt
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasParent ;
+                                    owl:someValuesFrom :Uncle
+                                  ]
+                                )
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Aunt
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasParent ;
+                                                                owl:someValuesFrom :Uncle
+                                                              ]
+                                                            )
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
                                                 owl:hasValue :MaleSex
                                               ]
                                             ) ;
@@ -1170,6 +1553,71 @@
 
 
 [ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Aunt
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasParent ;
+                                                                owl:someValuesFrom :Uncle
+                                                              ]
+                                                            )
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :MaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                           owl:unionOf ( :Aunt
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :hasParent ;
+                                                           owl:someValuesFrom :Uncle
+                                                         ]
+                                                       )
+                                         ]
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasSex ;
+                                           owl:hasValue :MaleSex
+                                         ]
+                                       ) ;
+                    rdf:type owl:Class
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Aunt
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasParent ;
+                                                                owl:someValuesFrom :Uncle
+                                                              ]
+                                                            )
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :MaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Class ;
+                    owl:unionOf ( :Aunt
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasParent ;
+                                    owl:someValuesFrom :Uncle
+                                  ]
+                                )
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
                        [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
                                                 owl:onProperty :hasSibling ;
                                                 owl:someValuesFrom :Person
@@ -1184,6 +1632,73 @@
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Brother
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSibling ;
+                                                owl:someValuesFrom :Person
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :MaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSibling ;
+                                                owl:someValuesFrom :Person
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :MaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasSibling ;
+                                           owl:someValuesFrom :Person
+                                         ]
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasSex ;
+                                           owl:hasValue :MaleSex
+                                         ]
+                                       ) ;
+                    rdf:type owl:Class
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSibling ;
+                                                owl:someValuesFrom :Person
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSex ;
+                                                owl:hasValue :MaleSex
+                                              ]
+                                            ) ;
+                         rdf:type owl:Class
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSibling ;
+                    owl:someValuesFrom :Person
+                  ]
 ] .
 
 
@@ -1221,7 +1736,74 @@
                        ]
                      ) ;
   rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
   rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Class ;
+                    owl:unionOf ( :Aunt
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasParent ;
+                                    owl:someValuesFrom :Uncle
+                                  ]
+                                )
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
 ] .
 
 
@@ -1256,6 +1838,28 @@
 
 
 [ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Class ;
+                         owl:unionOf ( :Daughter
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Son
+                                       ]
+                                     )
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Class ;
+                    owl:unionOf ( :Daughter
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasParent ;
+                                    owl:someValuesFrom :Son
+                                  ]
+                                )
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasChild ;
                          owl:someValuesFrom :Person
@@ -1263,6 +1867,46 @@
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Parent
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
 ] .
 
 
@@ -1288,11 +1932,128 @@
                        ]
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
                          owl:hasValue :MaleSex
                        ]
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Father
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
 ] .
 
 
@@ -1311,6 +2072,95 @@
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :GrandParent
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasChild ;
+                                                                owl:someValuesFrom :Person
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ]
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
 ] .
 
 
@@ -1350,11 +2200,241 @@
                        ]
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasChild ;
+                                                                owl:someValuesFrom :Person
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ]
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
                          owl:hasValue :MaleSex
                        ]
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :GrandFather
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasChild ;
+                    owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasChild ;
+                                                                owl:someValuesFrom :Person
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ]
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasChild ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
 ] .
 
 
@@ -1366,6 +2446,31 @@
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :OffSpring
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasParent ;
+                    owl:someValuesFrom :Person
+                  ]
 ] .
 
 
@@ -1391,11 +2496,176 @@
                        ]
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Class ;
+                    owl:unionOf ( :Daughter
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasParent ;
+                                    owl:someValuesFrom :Son
+                                  ]
+                                )
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasParent ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
                          owl:hasValue :MaleSex
                        ]
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Son
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasParent ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParent ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
 ] .
 
 
@@ -1415,6 +2685,50 @@
                          owl:onProperty :hasSibling ;
                          owl:someValuesFrom :Person
                        ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSibling ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
                          owl:hasValue :FemaleSex
@@ -1422,6 +2736,86 @@
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Sister
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSibling ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
 ] .
 
 
@@ -1449,12 +2843,141 @@
 
 [ owl:intersectionOf ( :Person
                        [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSibling ;
+                    owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSibling ;
+                    owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasChild ;
+                                                                owl:someValuesFrom :Person
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ]
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom [ owl:intersectionOf ( :Person
+                                                                   [ rdf:type owl:Restriction ;
+                                                                     owl:onProperty :hasChild ;
+                                                                     owl:someValuesFrom :Person
+                                                                   ]
+                                                                 ) ;
+                                              rdf:type owl:Class
+                                            ]
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
                          owl:hasValue :FemaleSex
                        ]
                      ) ;
   rdf:type owl:Class ;
   rdfs:subClassOf :Woman
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
 ] .
 
 
@@ -1469,6 +2992,49 @@
 ] .
 
 
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Person
+] .
+
+
+[ owl:intersectionOf ( :Person
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Female
+] .
+
+
 [ owl:intersectionOf ( [ rdf:type owl:Class ;
                          owl:unionOf ( :Aunt
                                        [ rdf:type owl:Restriction ;
@@ -1504,6 +3070,45 @@
                        ]
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasSex ;
+                         owl:hasValue :FemaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :FemaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
                          owl:hasValue :MaleSex
                        ]
                      ) ;
@@ -1516,6 +3121,41 @@
                                   ]
                                 )
                   ]
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Class ;
+                         owl:unionOf ( :Aunt
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasParent ;
+                                         owl:someValuesFrom :Uncle
+                                       ]
+                                     )
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
+                  ]
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Male
 ] .
 
 
@@ -1532,6 +3172,23 @@
   rdfs:subClassOf [ rdf:type owl:Restriction ;
                     owl:onProperty :hasSibling ;
                     owl:someValuesFrom :Person
+                  ]
+] .
+
+
+[ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSibling ;
+                         owl:someValuesFrom :Person
+                       ]
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasSex ;
+                         owl:hasValue :MaleSex
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                    owl:onProperty :hasSex ;
+                    owl:hasValue :MaleSex
                   ]
 ] .
 
