@@ -62,16 +62,15 @@ class MLEBayesNet(BayesNet):
             for node_name in sample:
                 # Extract parents
                 parents = self.nodes[node_name].parent_nodes
-
                 # Extract parent values
-                parent_values = [sample[p] for p in parents]
+                parent_values = [sample[p.var_name] for p in parents]
 
                 n[(node_name, tuple(parent_values))] = n.get((node_name, tuple(parent_values)), 0) + 1
 
         # Get cpds
         for node_name in self.nodes:
             node = self.nodes[node_name]
-            parents = node.parents
+            parents = node.parent_nodes
             for parent_values in product(*[range(2) for _ in parents]):
                 parent_values = list(parent_values)
                 n_parent_values = n.get((node_name, tuple(parent_values)), 0)
