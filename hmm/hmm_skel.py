@@ -1,10 +1,9 @@
-
 # coding: utf-8
 
 # # Hidden Markov Models
 # 
 #     Tudor Berariu (tudor.berariu@gmail.com), 2018
-     
+
 
 # Let's import some packages for later
 
@@ -14,14 +13,14 @@ from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 from itertools import product
 
-
 # ## The problem: *The Climber Robot*
 # Grid Representation
 
 
 COLORS = ["Black", "Red", "Green", "Blue"]
 
-class Grid(object): 
+
+class Grid(object):
     def __init__(self, name, elevation, color, p_t=.8, p_o=.8):
         self._name = name
         self.elevation = np.array(elevation)
@@ -29,19 +28,19 @@ class Grid(object):
         assert self.elevation.shape == self.color.shape
         self.p_t = p_t
         self.p_o = p_o
-        
+
     @property
     def name(self):
         return self._name
-    
+
     @property
     def states_no(self):
         return self.elevation.size
-    
+
     @property
     def shape(self):
         return self.elevation.shape
-    
+
     def get_neighbours(self, state):
         """Returns a list of tuples (neighbour, probability)"""
         y, x = state
@@ -50,7 +49,7 @@ class Grid(object):
         neighbours = []
         for (dy, dx) in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
             ny, nx = y + dy, x + dx
-            if ny >= 0 and nx >=0 and ny < H and nx < W:
+            if ny >= 0 and nx >= 0 and ny < H and nx < W:
                 neighbours.append((ny, nx))
 
         elevation = [self.elevation[i] for i in neighbours]
@@ -61,7 +60,7 @@ class Grid(object):
         prob = [p_max if e == max_e else p_other for e in elevation]
 
         return list(zip(neighbours, prob))
-    
+
     def get_colors(self, state):
         """Returns a list of tuples (color, probability)"""
         y, x = state
@@ -87,7 +86,6 @@ grid3 = Grid("Grid 3",
              [[2, 3, 1, 0], [1, 3, 3, 1], [0, 2, 0, 2], [2, 1, 1, 2]])  # color
 
 GRIDS = [grid1, grid2, grid3]
-
 
 _g_no = len(GRIDS)
 fig, axs = plt.subplots(1, _g_no, figsize=(5 * _g_no, 4), sharey="row")
@@ -116,14 +114,20 @@ def get_transition_probabilities(grid):
     H, W = grid.shape
     N = H * W
     A = np.zeros((N, N))
-    
+
     # TODO *1*: Complete the transition probablities matrix A.
     # Hint: Use the `get_neighbours` method.
-    
+    for x in range(W):
+        for y in range(H):
+            i = x + W * y
+            for new_coords, p in grid.get_neighbours((y, x)):
+                new_y, new_x = new_coords
+                j = new_x + W * new_y
+                A[i][j] = p
+
     # TODO *1* ends here
 
     return A
-
 
 
 # Visualize transition probabilities matrices
@@ -134,14 +138,13 @@ for grid, ax in zip(GRIDS, axs):
     sns.heatmap(A, square=True, cbar=True, ax=ax, cmap="Blues")
     ax.set_title(grid.name)
 
-
 # Test transition probabilities
 
 _test_idxs = [0, 1, 2, 5, 10, 13, 15], [1, 0, 3, 4, 9, 2, 14]
 _test_values = np.array([
-    [.5,      .2 / 3, .8 + .2 / 3, .8 / 3 + .05, .85, 0, .1],
-    [.1,      .2 / 3, .8 + .2 / 3,          .85, .05, 0, .9],
-    [.5, .4 + .2 / 3, .8 + .2 / 3,          .05, .05, 0, .5]
+    [.5, .2 / 3, .8 + .2 / 3, .8 / 3 + .05, .85, 0, .1],
+    [.1, .2 / 3, .8 + .2 / 3, .85, .05, 0, .9],
+    [.5, .4 + .2 / 3, .8 + .2 / 3, .05, .05, 0, .5]
 ])
 
 for i, grid in enumerate(GRIDS):
@@ -149,7 +152,7 @@ for i, grid in enumerate(GRIDS):
     assert A.shape == (grid.states_no, grid.states_no), "Bad shape!"
     assert np.allclose(A.sum(axis=1), np.ones(grid.states_no)), "Rows should sum to one!"
     assert np.allclose(A[_test_idxs], _test_values[i]), "Bad values!"
-    
+
 print("Transition matrix looks right! Task 1 accomplished!")
 
 
@@ -158,13 +161,19 @@ def get_emission_probabilities(grid):
     H, W = grid.shape
     N = grid.states_no
     B = np.zeros((H * W, len(COLORS)))
-    
+
     # Task 2: Compute the emission probabilities matrix.
     # Hint: Use method `get_colors`.
+    for x in range(W):
+        for y in range(H):
+            i = x + W * y
+            for color, p in grid.get_colors((y, x)):
+                B[i][color] = p
 
     # Task 2 ends here.        
-    
+
     return B
+
 
 # Visualize emission probabilities
 
@@ -178,7 +187,6 @@ for grid, ax in zip(GRIDS, axs):
     cm = LinearSegmentedColormap.from_list("cm", COLORS)
     sns.heatmap(_colors, cmap=cm, annot=B, ax=ax)
     ax.set_title(grid.name)
-
 
 #### Test emission probabilitiees
 
@@ -194,7 +202,7 @@ for i, grid in enumerate(GRIDS):
     assert B.shape == (grid.states_no, len(COLORS)), "Bad shape!"
     assert np.allclose(B.sum(axis=1), np.ones(grid.states_no)), "Rows should sum to one!"
     assert np.allclose(B[_test_idxs], _test_values[i]), "Bad values for " + grid.name + "!"
-    
+
 print("Emission probabilities look right! Task 2 accomplished!")
 
 
@@ -222,7 +230,7 @@ def get_sequence(grid, length):
         o = sample(grid.get_colors(state))
         states.append(state)
         observations.append(o)
-        
+
     return observations, states
 
 
@@ -239,13 +247,13 @@ cm = LinearSegmentedColormap.from_list("cm", COLORS)
 ax = sns.heatmap(grid.color, annot=grid.elevation, cmap=cm,
                  square=True, cbar=False, annot_kws={"size": 20})
 ax.set_title(grid.name)
-for t in range(T-1):
+for t in range(T - 1):
     y0, x0 = states[t]
     y0, x0 = y0 + .5, x0 + .5
     y1, x1 = states[t + 1]
     y1, x1 = y1 + .5, x1 + .5
     ax.annotate("", xy=(x1, y1), xytext=(x0, y0),
-                    arrowprops=dict(color="y", width=5.))
+                arrowprops=dict(color="y", width=5.))
 
 
 # ====================== Evaluation =======================
@@ -262,18 +270,22 @@ def forward(grid, observations):
     N = grid.states_no
     T = len(observations)
     alpha = np.zeros((T, N))
-    
+
     # TODO 3: Compute p and alpha values.
     # Hint: use the functions implemented for the previous tasks.
     pi = get_initial_distribution(grid)
     A = get_transition_probabilities(grid)
     B = get_emission_probabilities(grid)
-    
+
+    alpha[0] = pi * B[:, observations[0]]
+
+    for t in range(1, T):
+        alpha[t] = alpha[t - 1] @ A * B[:, observations[t]]
 
     # TODO 3 ends here
-
     p = sum(alpha[-1,])
     return p, alpha
+
 
 # See the forward algorithm in action
 grid = np.random.choice(GRIDS)
@@ -291,7 +303,6 @@ for grid in GRIDS:
         best_grid, best_p = grid.name, p
 
 print("Most probably the sequence was generated from " + best_grid + ".")
-
 
 # See how sequence length influences p
 RUNS_NO = 1000
@@ -313,24 +324,24 @@ for T in range(1, 11):
 # Test alpha_values
 _test_observations = [2, 2, 3]
 _test_values = np.array([
- [  3.12500000e-03, 3.12500000e-03, 3.12500000e-03, 5.31250000e-02,
-    3.12500000e-03, 3.12500000e-03, 5.31250000e-02, 3.12500000e-03,
-    5.31250000e-02, 5.31250000e-02, 3.12500000e-03, 3.12500000e-03,
-    3.12500000e-03, 3.12500000e-03, 3.12500000e-03, 3.12500000e-03],
- [  2.08333333e-05, 1.38020833e-04, 4.78385417e-03, 4.60416667e-03,
-    1.36718750e-03, 2.86458333e-04, 6.19791667e-04, 5.33854167e-04,
-    4.30755208e-02, 2.64739583e-02, 4.11458333e-04, 1.58854167e-04,
-    1.87500000e-04, 1.58854167e-04, 3.38541667e-05, 2.08333333e-05],
- [  5.01736111e-06, 3.57044271e-04, 2.39509549e-04, 2.30434028e-04,
-    1.71725825e-02, 7.27517361e-05, 1.94704861e-05, 3.14539931e-05,
-    1.19282552e-03, 1.03400174e-03, 6.97309028e-05, 3.74565972e-06,
-    2.44994792e-03, 6.72352431e-05, 2.82595486e-05, 6.42361111e-07]])
+    [3.12500000e-03, 3.12500000e-03, 3.12500000e-03, 5.31250000e-02,
+     3.12500000e-03, 3.12500000e-03, 5.31250000e-02, 3.12500000e-03,
+     5.31250000e-02, 5.31250000e-02, 3.12500000e-03, 3.12500000e-03,
+     3.12500000e-03, 3.12500000e-03, 3.12500000e-03, 3.12500000e-03],
+    [2.08333333e-05, 1.38020833e-04, 4.78385417e-03, 4.60416667e-03,
+     1.36718750e-03, 2.86458333e-04, 6.19791667e-04, 5.33854167e-04,
+     4.30755208e-02, 2.64739583e-02, 4.11458333e-04, 1.58854167e-04,
+     1.87500000e-04, 1.58854167e-04, 3.38541667e-05, 2.08333333e-05],
+    [5.01736111e-06, 3.57044271e-04, 2.39509549e-04, 2.30434028e-04,
+     1.71725825e-02, 7.27517361e-05, 1.94704861e-05, 3.14539931e-05,
+     1.19282552e-03, 1.03400174e-03, 6.97309028e-05, 3.74565972e-06,
+     2.44994792e-03, 6.72352431e-05, 2.82595486e-05, 6.42361111e-07]])
 
 p, alpha = forward(grid1, [2, 2, 3])
 assert alpha.shape == (3, grid1.states_no), "Bad shape!"
 assert np.allclose(alpha, _test_values), "Bad values!"
 assert np.allclose(p, sum(_test_values[2])), "Bad values!"
-    
+
 print("Alpha matrix looks right! Task 3 accomplished!")
 
 
@@ -342,17 +353,26 @@ def viterbi(grid, observations):
     T = len(observations)
     delta = np.zeros((T, N))
     states = np.zeros((T), dtype=int)
-    
+
     # Task 4: Implement the Viterbi algorithm.
     # Hint: use functions from tasks 1 and 2.
     pi = get_initial_distribution(grid)
     A = get_transition_probabilities(grid)
     B = get_emission_probabilities(grid)
-    # 
-    
+
+    delta[0] = pi * B[:, observations[0]]
+
+    for t in range(1, T):
+        delta[t] = np.max(delta[t - 1][:, None] * A[None, :, :], axis=1).squeeze() * B[:, observations[t]]
+
+    states[-1] = np.argmax(delta[-1])
+    for t in range(T - 2, -1, -1):
+        states[t] = np.argmax(delta[t] * A[:, states[t + 1]])
+
     # Task 4 ends here.
 
     return [(s // W, s % W) for s in states], delta
+
 
 # Decoding a state
 grid = np.random.choice(GRIDS)
@@ -383,7 +403,6 @@ for t in range(T - 1):
     y0, x0, y1, x1 = y0 + .5, x0 + .5, y1 + .5, x1 + .5
     axs[1].annotate("", xy=(x1, y1), xytext=(x0, y0),
                     arrowprops=dict(color="y", width=5.))
-
 
 # Evaluate how good the decoded paths are
 RUNS_NO = 1000
@@ -423,4 +442,3 @@ assert all([s_i == s_j for (s_i, s_j) in zip(states, _test_states)])
 assert np.allclose(delta, _test_values)
 
 print("Viterbi looks right! Task 4 accomplished!")
-
