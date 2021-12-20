@@ -5,6 +5,7 @@ import itertools
 import random
 from copy import deepcopy
 import numpy as np
+from networkx import complete_to_chordal_graph, maximum_spanning_tree
 
 
 def almost_equal(x: float, y: float, threshold: float = 1e-6) -> bool:
@@ -331,7 +332,7 @@ class JunctionTree:
         return nx.algorithms.moral_graph(g)
 
     def _triangulate(self, h: nx.Graph) -> nx.Graph:
-        return nx.algorithms.minimum_spanning_tree(h)
+        return complete_to_chordal_graph(h)[0]
 
     def _create_clique_graph(self, th: nx.Graph) -> nx.Graph:
         """
@@ -339,16 +340,7 @@ class JunctionTree:
         :param th: The triangulated graph
         :return: A clique graph
         """
-        clique_graph = nx.Graph()
-        for n in th.nodes:
-            clique_graph.add_node(n)
-
-        for n in th.nodes:
-            for n2 in th.neighbors(n):
-                if n2 not in th.neighbors(n):
-                    clique_graph.add_edge(n, n2)
-
-        return clique_graph
+        return nx.make_max_clique_graph(th)
 
     def _extract_clique_tree(self, c: nx.Graph) -> nx.Graph:
         """
@@ -356,16 +348,7 @@ class JunctionTree:
         :param c: The clique graph
         :return: The clique tree
         """
-        clique_tree = nx.Graph()
-        for n in c.nodes:
-            clique_tree.add_node(n)
-
-        for n in c.nodes:
-            for n2 in c.neighbors(n):
-                if n2 not in c.neighbors(n):
-                    clique_tree.add_edge(n, n2)
-
-        return clique_tree
+        return maximum_spanning_tree(c)
 
     def _get_clique_tree(self) -> nx.Graph:
         """
@@ -444,6 +427,7 @@ class JunctionTree:
         :param calibrated_jt: The calibrated Junction Tree
         :return: the float value for the probability of the query
         """
+        raise NotImplementedError("Not implemented by student")
 
     def run_query(self, query: Dict[str, int], evidence: Dict[str, int]) -> float:
         # TODO: select a non-None root
