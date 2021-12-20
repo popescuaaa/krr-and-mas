@@ -8,7 +8,7 @@ import numpy as np
 
 
 def almost_equal(x: float, y: float, threshold: float = 1e-6) -> bool:
-    return abs(x-y) < threshold
+    return abs(x - y) < threshold
 
 
 def factor_crossjoin(f1: pd.DataFrame, f2: pd.DataFrame, how: str = "outer", **kwargs) -> pd.DataFrame:
@@ -42,14 +42,14 @@ def multiply_factors(f1: pd.DataFrame, f2: pd.DataFrame) -> pd.DataFrame:
 
     if not common_vars:
         ### we have to do a cross join
-        f_res = BayesNode.factor_crossjoin(f1, f2)
+        f_res = factor_crossjoin(f1, f2)
         f_res["prob"] = f_res["prob_x"] * f_res["prob_y"]
         f_res = f_res.drop(columns=["prob_x", "prob_y"])
 
     else:
         ### there is a set of common vars, so we merge on them
         disjoint_vars = [v for v in f1_vars if v not in f2_vars] + [v for v in f2_vars if v not in f1_vars]
-        f_res = pd.merge(f1.reset_index(), f2.reset_index(), on=common_vars, how="inner")\
+        f_res = pd.merge(f1.reset_index(), f2.reset_index(), on=common_vars, how="inner") \
             .set_index(keys=disjoint_vars + common_vars)
         f_res["prob"] = f_res["prob_x"] * f_res["prob_y"]
         f_res = f_res.drop(columns=["prob_x", "prob_y"])
@@ -57,7 +57,7 @@ def multiply_factors(f1: pd.DataFrame, f2: pd.DataFrame) -> pd.DataFrame:
     return f_res
 
 
-def sumout(f:pd.DataFrame, vars: List[str]) -> pd.DataFrame or float:
+def sumout(f: pd.DataFrame, vars: List[str]) -> pd.DataFrame or float:
     f_vars = f.index.names
     remaining_vars = [v for v in f_vars if v not in vars]
 
@@ -68,7 +68,7 @@ def sumout(f:pd.DataFrame, vars: List[str]) -> pd.DataFrame or float:
         return f["prob"].sum()
 
 
-def normalize(f:pd.DataFrame) -> pd.DataFrame:
+def normalize(f: pd.DataFrame) -> pd.DataFrame:
     f["prob"] = f["prob"] / f["prob"].sum()
     return f
 
@@ -77,6 +77,7 @@ class Factor:
     """
     Place holder class for a Factor in a factor graph (implicitly also within a junction tree)
     """
+
     def __init__(self, vars: List[str], table: pd.DataFrame):
         """
         Instantiate a factor
@@ -85,7 +86,6 @@ class Factor:
         """
         self.vars = vars
         self.table = table
-
 
 
 class BayesNode:
@@ -161,7 +161,8 @@ class BayesNet:
     """
     Representation for a Bayesian Network
     """
-    def __init__(self, bn_file: str="data/bnet"):
+
+    def __init__(self, bn_file: str = "data/bnet"):
         # nodes are indexed by their variable name
         self.nodes, self.queries = BayesNet.parse(bn_file)
 
@@ -181,7 +182,6 @@ class BayesNet:
         cpd_df = pd.DataFrame(data=cpt_vals, index=index, columns=["prob"])
 
         return cpd_df
-
 
     @staticmethod
     def parse(file: str) -> Tuple[Dict[str, BayesNode], List[Dict[str, Any]]]:
@@ -322,6 +322,7 @@ class JunctionTree:
     """
     Place holder class for the JunctionTree algorithm
     """
+
     def __init__(self, bn: BayesNet):
         self.bn = bn
         self.clique_tree = self._get_clique_tree()
@@ -399,6 +400,9 @@ class JunctionTree:
 
         :return: The uncalibrated junction tree with incorporated evidence
         """
+
+        # TODO 5: incorporate evidence into the junction tree
+
         raise NotImplementedError("Not implemented by student")
 
     def _run_belief_propagation(self, uncalibrated_jt) -> nx.DiGraph:
@@ -415,6 +419,7 @@ class JunctionTree:
         :param calibrated_jt: The calibrated Junction Tree
         :return: the float value for the probability of the query
         """
+        raise NotImplementedError("Not implemented by student")
 
     def run_query(self, query: Dict[str, int], evidence: Dict[str, int]) -> float:
         # TODO: select a non-None root
@@ -446,6 +451,6 @@ class JunctionTree:
 
 
 if __name__ == "__main__":
-    bn = BayesNet(bn_file="data/bnet")
+    bn = BayesNet(bn_file="bnlearning_samples_missing")
     jt = JunctionTree(bn=bn)
     jt.run_queries(bn.queries)

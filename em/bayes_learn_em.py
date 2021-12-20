@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List, Dict, Tuple, Any, Iterator
 from bayes_net import BayesNet, BayesNode
 from itertools import product
@@ -42,7 +43,8 @@ class MLEBayesNet(BayesNet):
     """
     Placeholder class for the Bayesian Network that will learn CPDs using the frequentist MLE
     """
-    def __init__(self, bn_file: str="data/bnet"):
+
+    def __init__(self, bn_file: str = "data/bnet"):
         super(MLEBayesNet, self).__init__(bn_file=bn_file)
         self._reset_cpds()
 
@@ -56,14 +58,35 @@ class MLEBayesNet(BayesNet):
 
     def learn_cpds(self, samples: List[Dict[str, int]], alpha: float = 1.0) -> None:
         # TODO: YOUR CODE HERE
-        pass
+        cpd_freq = dict()
+        for node_name in self.nodes:
+            node = self.nodes[node_name]
+            var_names = [node.var_name] + [p.var_name for p in node.parent_nodes]
+            cpd = ",".join(var_names)
+
+            cpd_freq[cpd] = defaultdict(lambda: 0)
+
+            for sample in samples:
+                e = tuple([sample[var_name] for var_name in var_names])
+                cpd_freq[cpd][e] += 1
+
+            for l1 in node.cpd.index:
+                l2 = list(l1)
+                l2[0] = 1 - l2[0]
+                l2 = tuple(l2)
+                cpd_value = (cpd_freq[cpd][l1] + alpha) / (cpd_freq[cpd][l1] + cpd_freq[cpd][l2] + 2 * alpha)
+                node.cpd[tuple(l1)] = cpd_value
+
+
+def sigmoid(x): return 1 / (1 + np.exp(-x))
 
 
 class ParametricBayesNet(BayesNet):
     """
     Placeholder class for the Bayesian Network that will learn CPDs using the frequentist MLE
     """
-    def __init__(self, bn_file: str="data/bnet"):
+
+    def __init__(self, bn_file: str = "data/bnet"):
         super(ParametricBayesNet, self).__init__(bn_file=bn_file)
         self._random_cpds()
 
@@ -93,12 +116,13 @@ class ParametricBayesNet(BayesNet):
             index_line = tuple([1] + parent_vals)
             score = self.nodes[var_name].cpd.loc[index_line]["prob"]
 
-            # TODO 2: YOUR CODE HERE
             # compute the gradient with respect to the parameters modeling the CPD of variable var_name
             # grad = ...
+            grad = sample[var_name] - sigmoid(score)
 
-            # update the parameters - using gradient ASCENT
+            # update the parameters
             # self.nodes[var_name].cpd.loc[index_line]["prob"] = ...
+            self.nodes[var_name].cpd.loc[index_line]["prob"] = score + learning_rate * grad
 
     def pretty_print(self):
         res = "Bayesian Network:\n"
@@ -120,11 +144,10 @@ class EMBayesNet(MLEBayesNet):
         self.cpds = {}  # type: Dict[str, Dict[tuple, float]]
 
     def learn_cpds(self, samples_with_missing: List[Dict[str, int]],
-              alpha: float = 1.):
+                   alpha: float = 1.):
         # In the samples_with_missing dict, the digit "2" indicates that 
         # the truth value of the event variable is missing
         pass
-
 
 
 def get_args() -> Namespace:
@@ -156,7 +179,7 @@ def get_args() -> Namespace:
 def main():
     args = get_args()
     table_bn = BayesNet(bn_file=args.file_name)
-    em_bn = EMBayesNet(bn_file=args.file_name)
+    em_bn = EMBayesNet()
 
     print("========== EM ==========")
     samples = read_samples(args.samples_file_name)
