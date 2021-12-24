@@ -1,0 +1,65 @@
+Initial params MLE bn:
+Initial params parametric bn:
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+========== Frequentist MLE ==========
+Reference BN
+MLE BayesNet after learning CPDs
+========== Parametric MLE ==========
+Step      0 | CE: 10.580 /  7.869
+Step    500 | CE:  9.473 /  7.869
+Step   1000 | CE:  9.038 /  7.869
+Step   1500 | CE:  8.788 /  7.869
+Step   2000 | CE:  8.433 /  7.869
+Step   2500 | CE:  8.402 /  7.869
+Step   3000 | CE:  8.360 /  7.869
+Step   3500 | CE:  8.225 /  7.869
+Step   4000 | CE:  8.163 /  7.869
+Step   4500 | CE:  8.015 /  7.869
+Step   5000 | CE:  8.204 /  7.869
+Step   5500 | CE:  8.002 /  7.869
+Step   6000 | CE:  8.190 /  7.869
+Step   6500 | CE:  8.165 /  7.869
+Step   7000 | CE:  8.101 /  7.869
+Step   7500 | CE:  8.087 /  7.869
+Step   8000 | CE:  7.821 /  7.869
+Step   8500 | CE:  7.921 /  7.869
+Step   9000 | CE:  8.004 /  7.869
+Step   9500 | CE:  7.931 /  7.869
+Step  10000 | CE:  7.794 /  7.869
+Reference BN
+Parametric BayesNet after learning CPDs
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.
+/Users/andreipopescu/Documents/dev/krr/bn-learning/bayes_learn.py:131: PerformanceWarning: indexing past lexsort depth may impact performance.
+  cpd.loc[0, "true_prob"] = 1 - cpd.loc[1, "true_prob"]
+sys:1: PerformanceWarning: indexing past lexsort depth may impact performance.

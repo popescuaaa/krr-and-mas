@@ -3,7 +3,7 @@ from bayes_net import BayesNet, BayesNode
 from itertools import product
 import numpy as np
 from argparse import ArgumentParser, Namespace
-
+from collections import defaultdict
 
 def all_dicts(variables: List[str]) -> Iterator[Dict[str, int]]:
     for keys in product(*([[0, 1]] * len(variables))):
@@ -75,6 +75,9 @@ class MLEBayesNet(BayesNet):
                 cpd_value = (cpd_freq[cpd][l1] + alpha) / (cpd_freq[cpd][l1] + cpd_freq[cpd][l2] + 2 * alpha)
                 node.cpd[tuple(l1)] = cpd_value
 
+
+def sigmoid(x):
+    return 1/(1 + np.exp(-x))
 
 class ParametricBayesNet(BayesNet):
     """
