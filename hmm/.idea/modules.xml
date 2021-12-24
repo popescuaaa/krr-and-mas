@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/semantic-tableaux.iml" filepath="$PROJECT_DIR$/.idea/semantic-tableaux.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hmm.iml" filepath="$PROJECT_DIR$/.idea/hmm.iml" />
     </modules>
   </component>
 </project>
