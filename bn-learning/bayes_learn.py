@@ -56,28 +56,24 @@ class MLEBayesNet(BayesNet):
             self.nodes[node_name].cpd["prob"] = 0.5
 
     def learn_cpds(self, samples: List[Dict[str, int]], alpha: float = 1.0) -> None:
-        # TODO: YOUR CODE HERE
-        n = {}
-        for sample in samples:
-            for node_name in sample:
-                # Extract parents
-                parents = self.nodes[node_name].parent_nodes
-                # Extract parent values
-                parent_values = [sample[p.var_name] for p in parents]
-
-                n[(node_name, tuple(parent_values))] = n.get((node_name, tuple(parent_values)), 0) + 1
-
-        # Get cpds
+        cpd_freq = dict()
         for node_name in self.nodes:
             node = self.nodes[node_name]
-            parents = node.parent_nodes
-            for parent_values in product(*[range(2) for _ in parents]):
-                parent_values = list(parent_values)
-                n_parent_values = n.get((node_name, tuple(parent_values)), 0)
-                if n_parent_values == 0:
-                    node.cpd["prob"][parent_values] = 0.5
-                else:
-                    node.cpd["prob"][parent_values] = (n_parent_values + alpha) / (len(samples) + 2 * alpha)
+            var_names = [node.var_name] + [p.var_name for p in node.parent_nodes]
+            cpd = ",".join(var_names)
+
+            cpd_freq[cpd] = defaultdict(lambda: 0)
+
+            for sample in samples:
+                e = tuple([sample[var_name] for var_name in var_names])
+                cpd_freq[cpd][e] += 1
+
+            for l1 in node.cpd.index:
+                l2 = list(l1)
+                l2[0] = 1 - l2[0]
+                l2 = tuple(l2)
+                cpd_value = (cpd_freq[cpd][l1] + alpha) / (cpd_freq[cpd][l1] + cpd_freq[cpd][l2] + 2 * alpha)
+                node.cpd[tuple(l1)] = cpd_value
 
 
 class ParametricBayesNet(BayesNet):
@@ -117,13 +113,11 @@ class ParametricBayesNet(BayesNet):
             # TODO 2: YOUR CODE HERE
             # compute the gradient with respect to the parameters modeling the CPD of variable var_name
             # grad = ...
+            grad = sample[var_name] - sigmoid(score)
 
             # update the parameters
             # self.nodes[var_name].cpd.loc[index_line]["prob"] = ...
-            prob = self.prob(var_name=var_name, parent_values=parent_vals)
-            grad = sample[var_name] - prob
-            score += learning_rate * grad
-            self.nodes[var_name].cpd.loc[index_line]["prob"] = score
+            self.nodes[var_name].cpd.loc[index_line]["prob"] = score + learning_rate * grad
 
     def pretty_print(self):
         res = "Bayesian Network:\n"
