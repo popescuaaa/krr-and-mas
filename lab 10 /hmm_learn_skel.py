@@ -206,6 +206,15 @@ def forward_backward(grid, observations):
     A = get_transition_probabilities(grid)
     B = get_emission_probabilities(grid)
     
+    alpha[0] = pi * B[:, observations[0]]
+
+    for t in range(1, T):
+        alpha[t] = alpha[t - 1] @ A * B[:, observations[t]]
+    
+    beta[T] = np.ones(A.shape[0])
+    
+    for t in range(1, T):
+        beta[t] = beta[t + 1] * B[:, observations[t+1]] @ A
 
     # TODO 3 ends here
 
@@ -229,7 +238,7 @@ def baum_welch(dataset, eps = 1e-2):
     for i in range(N):
         B[i, :] /= np.sum(B[i])
         
-        
+    
     # ### TODO 2: implement baum welch
     
     # ### End TODO 2
@@ -249,3 +258,5 @@ _colors = np.array([list(range(len(COLORS))) for _ in range(N)])
 cm = LinearSegmentedColormap.from_list("cm", COLORS)
 sns.heatmap(_colors, cmap=cm, annot=B_estimated, ax=ax)
 ax.set_title("Estimated Emission Matrix")
+
+plt.show()
