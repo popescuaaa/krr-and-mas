@@ -211,10 +211,19 @@ def forward_backward(grid, observations):
     for t in range(1, T):
         alpha[t] = alpha[t - 1] @ A * B[:, observations[t]]
     
-    beta[T] = np.ones(A.shape[0])
-    
-    for t in range(1, T):
-        beta[t] = beta[t + 1] * B[:, observations[t+1]] @ A
+    # print(A.shape)
+    # print(alpha.shape)
+    # print(B.shape)
+
+    # print(A.shape[0])
+    # print(beta.shape)
+    # print(T)
+
+    beta[0, :] = np.ones(A.shape[0])
+    # print(beta)
+
+    for t in range(1, T - 1):
+        beta[t] = beta[t + 1] * B[:, observations[t + 1]] @ A
 
     # TODO 3 ends here
 
@@ -222,21 +231,65 @@ def forward_backward(grid, observations):
     return p, alpha, beta
 
 
+
 def baum_welch(dataset, eps = 1e-2):
     N = grid.states_no
     T = len(dataset[0])
+
+    p, alpha, beta = forward_backward(grid, observations)
+
+    print(alpha.shape)
+    print(beta.shape)
+
+    gamma = np.zeros((T, N))
     
+    print(gamma.shape)
+
+    for i in range(T):
+        for j in range(N):
+            gamma[i, j] = (alpha[i, j] * beta[i, j]) / p
+
+    print(gamma)
+
     # pi is already known
     pi = get_initial_distribution(grid)
     
     # initialize A and B to be probability matrices
     A = np.random.random((N, N))
     for i in range(N):
-        A[i, :] /= np.sum(A[i])
+        for j in range(N):
+            for t in range(N-1):
+                A[j,i] = A[j,i] + pi[t]
+
+            denomenator_A = [pi[t_x] for t_x in range(T - 1) for i_x in range(N)]
+            denomenator_A = sum(denomenator_A)
+            
+            if (denomenator_A == 0):
+                A[j, i] = 0
+            else: 
+                A[j, i] = A[j,i]/denomenator_A
+
+            # A[i, :] /= np.sum(A[i])
     
+    print(A)
+
     B = np.random.random((N, len(COLORS)))
+
     for i in range(N):
-        B[i, :] /= np.sum(B[i])
+        for j in range(N):
+            print([idx for idx, val in enumerate(observations)])
+            indices = [idx for idx, val in enumerate(observations) if val == observations[i]]
+            print(indices)
+
+            numerator_B = sum(gamma[j, indices])
+            denomenator_B = sum(gamma[j, :])
+            
+            if (denomenator_B == 0):
+                B[j, i] = 0
+            else:
+                B[j, i] = numerator_B / denomenator_B
+
+            # B[i, :] /= np.sum(B[i])
         
     
     # ### TODO 2: implement baum welch
