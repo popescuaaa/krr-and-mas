@@ -1,12 +1,14 @@
 
 # coding: utf-8
-
+import scipy.stats as ss
+from cProfile import run
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 from itertools import product
 
+np.random.seed(42)
 
 # ## The problem: *The Climber Robot*
 # Grid Representation
@@ -211,13 +213,6 @@ def forward_backward(grid, observations):
     for t in range(1, T):
         alpha[t] = alpha[t - 1] @ A * B[:, observations[t]]
     
-    # print(A.shape)
-    # print(alpha.shape)
-    # print(B.shape)
-
-    # print(A.shape[0])
-    # print(beta.shape)
-    # print(T)
 
     beta[0, :] = np.ones(A.shape[0])
     # print(beta)
@@ -233,67 +228,118 @@ def forward_backward(grid, observations):
 
 
 def baum_welch(dataset, eps = 1e-2):
-    N = grid.states_no
-    T = len(dataset[0])
+    # N = grid.states_no
+    # T = len(dataset[0])
 
-    p, alpha, beta = forward_backward(grid, observations)
+    # K = grid.states_no
+    # N = len(dataset[0])
+    # T = len(dataset)
 
-    print(alpha.shape)
-    print(beta.shape)
+    obs_seq = np.array(dataset)
+    obs = np.unique(obs_seq)
 
-    gamma = np.zeros((T, N))
+    K = grid.states_no
+    N = len(obs)
+    T = len(obs_seq)
+
+    # p, alpha, beta = forward_backward(grid, observations)
     
-    print(gamma.shape)
-
-    for i in range(T):
-        for j in range(N):
-            gamma[i, j] = (alpha[i, j] * beta[i, j]) / p
-
-    print(gamma)
-
     # pi is already known
     pi = get_initial_distribution(grid)
-    
+    pi /= pi.sum()
+
+    def s(i):
+        data = np.argwhere(obs == obs_seq[i]).flatten()
+        if len(data) == 0:
+            return 0
+        else:
+            return data[len(data) // 2]
+
+    alpha = np.zeros((T, K))
+    beta = np.zeros((T, K))
+    running = True
+
+    log = {
+        'tp': [], 'ep': [], 'pi': []
+    }
+
     # initialize A and B to be probability matrices
-    A = np.random.random((N, N))
-    for i in range(N):
-        for j in range(N):
-            for t in range(N-1):
-                A[j,i] = A[j,i] + pi[t]
-
-            denomenator_A = [pi[t_x] for t_x in range(T - 1) for i_x in range(N)]
-            denomenator_A = sum(denomenator_A)
-            
-            if (denomenator_A == 0):
-                A[j, i] = 0
-            else: 
-                A[j, i] = A[j,i]/denomenator_A
-
-            # A[i, :] /= np.sum(A[i])
+    # A = np.random.random((N, N))
+    A = np.random.random((K, K))
+    A /= A.sum(axis=1)[:, None]
     
-    print(A)
 
-    B = np.random.random((N, len(COLORS)))
-
-    for i in range(N):
-        for j in range(N):
-            print([idx for idx, val in enumerate(observations)])
-            indices = [idx for idx, val in enumerate(observations) if val == observations[i]]
-            print(indices)
-
-            numerator_B = sum(gamma[j, indices])
-            denomenator_B = sum(gamma[j, :])
-            
-            if (denomenator_B == 0):
-                B[j, i] = 0
-            else:
-                B[j, i] = numerator_B / denomenator_B
-
-            # B[i, :] /= np.sum(B[i])
-        
+    # B = np.random.random((N, len(COLORS)))
+    # for i in range(N):
+    #     B[i, :] /= np.sum(B[i])
+    B = np.random.random((K, N))
+    B /= B.sum(axis=1)[:, None]
     
+    print(A.shape)
+    print(B.shape)
+    print(pi.T.shape)
+    print(s(0))
+
     # ### TODO 2: implement baum welch
-    
+    while running:
+        alpha[0] = pi * B[:, s(0)]
+        alpha[0] /= alpha[0].sum()
+
+        for i in range(1, T):
+            alpha[i] = np.sum(alpha[i-1] * A, axis=1) * B[:, s(i)]
+            alpha[i] /= alpha[i].sum()
+
+        beta[T-1] = 1
+        beta[T-1] /= beta[T-1].sum()
+
+
+        for i in reversed(range(T-1)):
+            beta[i] = np.sum(
+                beta[i+1] * A * B[:, s(i+1)],
+                axis=1
+            )  # i + 1
+            beta[i] /= beta[i].sum()
+
+        ksi = np.zeros((T, K, K))
+        gamma = np.zeros((T, K))
+
+        for i in range(T-1):
+            ksi[i] = alpha[i] * A * beta[i+1] * B[:, s(i+1)]
+            ksi[i] /= ksi[i].sum()
+
+            gamma[i] = alpha[i] * beta[i]
+            gamma[i] /= gamma[i].sum()
+
+        _pi = gamma[1]
+        _tp = np.sum(ksi[:-1], axis=0) / gamma[:-1].sum(axis=0)
+        _tp /= _tp.sum(axis=1)[:, None]
+        _ep = np.zeros((K, N))
+
+        for n, ob in enumerate(obs):
+            _ep[:, n] = gamma[
+                np.argwhere(obs_seq == ob).ravel(), :
+            ].sum(axis=0) / gamma.sum(axis=0)
+
+        tp_entropy = ss.entropy(A.ravel(), _tp.ravel())
+        ep_entropy = ss.entropy(B.ravel(), _ep.ravel())
+        pi_entropy = ss.entropy(pi, _pi)
+
+        log['tp'].append(tp_entropy)
+        log['ep'].append(ep_entropy)
+        log['pi'].append(pi_entropy)
+
+        if tp_entropy < eps and\
+            ep_entropy < eps and\
+            pi_entropy < eps:
+            running = False
+
+        B = _ep.copy()
+        A = _tp.copy()
+        pi = _pi.copy()
+
+        if not running:
+            break
+
     # ### End TODO 2
     return pi, A, B
 
