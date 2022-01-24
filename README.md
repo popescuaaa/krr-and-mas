@@ -23,4 +23,5 @@ Practical sessions:
     -   [x] 7
     -   [ ] 8
 -   [x] hmm (Hidden Markov models) (9)
--   [] hmm learning (10) ~ not quite done
+-   [x] hmm learning (10)
+-   [x] variational auto-encoder
