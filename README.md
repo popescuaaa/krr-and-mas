@@ -25,3 +25,8 @@ Practical sessions:
 -   [x] hmm (Hidden Markov models) (9)
 -   [x] hmm learning (10)
 -   [x] variational auto-encoder
+
+
+---
+
+-   [ ] Organize folder and readme 
