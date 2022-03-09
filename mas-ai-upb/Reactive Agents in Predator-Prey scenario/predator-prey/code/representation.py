@@ -100,6 +100,8 @@ class GridPosition(object):
     def __init__(self, x, y):
         self.__x = x
         self.__y = y
+        self.x = x
+        self.y = y
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

@@ -1,9 +1,23 @@
-from base import Agent, Action, Perception
-from representation import GridRelativeOrientation, GridOrientation
-from hunting import HuntingEnvironment, WildLifeAgentData, WildLifeAgent
+import random
+import time
 from enum import Enum
+from pprint import pprint
 
-import time, random
+from base import Action, Perception
+from hunting import HuntingEnvironment, WildLifeAgentData, WildLifeAgent
+from representation import GridRelativeOrientation, GridOrientation
+from communication import AgentMessage, SocialAction
+
+ID = 1
+
+
+# Id helper
+def generate_predator_id():
+    global ID
+    old_id = ID
+    new_id = ID + 1
+    ID = new_id
+    return old_id
 
 
 class ProbabilityMap(object):
@@ -199,6 +213,7 @@ class MyPredator(WildLifeAgent):
         super(MyPredator, self).__init__(WildLifeAgentData.PREDATOR)
         self.map_width = map_width
         self.map_height = map_height
+        self.predators_memory = {}
 
     def response(self, perceptions):
         """
@@ -206,6 +221,128 @@ class MyPredator(WildLifeAgent):
         :param perceptions:
         :return:
         """
+        # Create a new instance for prop map in order to know which action to do
+
+        print(perceptions.__dict__)
+        current_position = perceptions.agent_position
+        nearby_predators = perceptions.nearby_predators
+        nearby_pray = perceptions.nearby_prey
+        obstacles = perceptions.obstacles
+        messages = perceptions.messages
+
+        my_id = self.id
+
+        current_predator_prob_map = ProbabilityMap(existing_map=None)
+
+        # Remember predator friends (possible positions)
+        for predator_id, predator_pos in nearby_predators:
+            if predator_pos == current_position:
+                my_id = predator_id
+
+            if predator_id not in self.predators_memory and predator_pos != current_position:
+                self.predators_memory[predator_id] = predator_pos
+
+        # Find best pray
+        best_pray = None
+        for pray in nearby_pray:
+            if best_pray is None:
+                best_pray = pray
+            else:
+                if current_position.get_distance(pray) < current_position.get_distance(best_pray):
+                    best_pray = pray
+
+            # Check is a friend nearby
+            for friend_id in self.predators_memory:
+                messages.append(AgentMessage(sender_id=my_id, destination_id=friend_id, content=(current_position, pray)))
+
+        # Create a prob map for predator actions
+        if my_id % 4 == 0:
+            # I am sent to kill, or I am the sweeper
+
+            if current_position.get_neighbour_position(GridOrientation.SOUTH) in obstacles or \
+                    current_position.get_neighbour_position(GridOrientation.WEST) in obstacles:
+
+                if current_position.get_neighbour_position(GridOrientation.SOUTH) not in obstacles:
+                    current_predator_prob_map.put(MyAction.SOUTH, 1)
+                else:
+                    current_predator_prob_map.put(MyAction.EAST, 1)
+            else:
+                if current_position.get_neighbour_position(GridOrientation.NORTH) in obstacles:
+                    current_predator_prob_map.put(MyAction.WEST, 0.6)
+                    current_predator_prob_map.put(MyAction.SOUTH, 0.4)
+                else:
+                    current_predator_prob_map.put(MyAction.NORTH, 0.8)
+                    current_predator_prob_map.put(MyAction.WEST, 0.2)
+
+        elif my_id % 2 == 0:
+            current_predator_prob_map.put(MyAction.EAST, 0.22)
+            current_predator_prob_map.put(MyAction.WEST, 0.28)
+            current_predator_prob_map.put(MyAction.NORTH, 0.25)
+            current_predator_prob_map.put(MyAction.SOUTH, 0.25)
+        else:
+            current_predator_prob_map.put(MyAction.EAST, 0.28)
+            current_predator_prob_map.put(MyAction.WEST, 0.22)
+            current_predator_prob_map.put(MyAction.NORTH, 0.25)
+            current_predator_prob_map.put(MyAction.SOUTH, 0.25)
+
+        if best_pray is None:
+            # I check messages from my fellows
+            for message in messages:
+                content = message.content
+                friend_id, friend_pray = content
+
+                if best_pray is None:
+                    best_pray = friend_pray
+                else:
+                    if current_position.get_distance(friend_pray) < current_position.get_distance(best_pray):
+                        best_pray = friend_pray
+
+        if best_pray is not None:
+            # Take an action
+            current_predator_prob_map.empty()
+            _, pos = best_pray
+
+            px, py = pos.x, pos.y
+            mx, my = current_position.x, current_position.y
+
+            if px < mx:
+                current_predator_prob_map.put(MyAction.WEST, 0.5)
+
+            if px > mx:
+                current_predator_prob_map.put(MyAction.EAST, 0.5)
+
+            if py > my:
+                current_predator_prob_map.put(MyAction.NORTH, 0.5)
+
+            if py < my:
+                current_predator_prob_map.put(MyAction.SOUTH, 0.5)
+
+        # Filter the actions which cannot be executed due to obstacles
+        for obstacle in obstacles:
+            if current_position.get_distance_to(obstacle) > 1:
+                continue
+            else:
+                relative_obstacles_orientation = current_position.get_relative_orientation(obstacle)
+
+                if relative_obstacles_orientation == GridRelativeOrientation.FRONT:
+                    current_predator_prob_map.remove(MyAction.NORTH)
+                    break
+                elif relative_obstacles_orientation == GridRelativeOrientation.BACK:
+                    current_predator_prob_map.remove(MyAction.SOUTH)
+                    break
+                elif relative_obstacles_orientation == GridRelativeOrientation.RIGHT:
+                    current_predator_prob_map.remove(MyAction.EAST)
+                    break
+                else:
+                    current_predator_prob_map.remove(MyAction.WEST)
+                    break
+
+        final_predator_action = None
+
+        if len(current_predator_prob_map.list_actions()) > 0:
+            final_predator_action = current_predator_prob_map.choice()
+
+        return SocialAction(final_predator_action)
 
 
 class MyEnvironment(HuntingEnvironment):
@@ -266,16 +403,38 @@ class MyEnvironment(HuntingEnvironment):
                                                              obstacles=nearby_obstacles,
                                                              nearby_predators=predators,
                                                              nearby_prey=prey)
+            print("added")
+
+        ## get perceptions for prey agents
+        for predator_data in self._predator_agents:
+            nearby_obstacles = self.get_nearby_obstacles(predator_data.grid_position, MyEnvironment.PREDATOR_RANGE)
+            nearby_predators = self.get_nearby_predators(predator_data.grid_position, MyEnvironment.PREDATOR_RANGE)
+            nearby_prey = self.get_nearby_prey(predator_data.grid_position, MyEnvironment.PREDATOR_RANGE)
+
+            predators = [(ag_data.linked_agent.id, ag_data.grid_position) for ag_data in nearby_predators]
+            prey = [(ag_data.linked_agent.id, ag_data.grid_position) for ag_data in nearby_prey]
+
+            agent_perceptions[predator_data] = MyAgentPerception(agent_position=prey_data.grid_position,
+                                                                 obstacles=nearby_obstacles,
+                                                                 nearby_predators=predators,
+                                                                 nearby_prey=prey,
+                                                                 messages=self.message_box)
 
         ## TODO: create perceptions for predator agents, including messages in the `message_box`
 
         """
         STAGE 2: call response for each agent to obtain desired actions
         """
+
+        pprint(agent_perceptions)
+
         agent_actions = {}
         ## TODO: get actions for all agents
         for prey_data in self._prey_agents:
             agent_actions[prey_data] = prey_data.linked_agent.response(agent_perceptions[prey_data])
+
+        for predator_data in self._predator_agents:
+            agent_actions[predator_data] = predator_data.linked_agent.response(agent_perceptions[predator_data])
 
         """
         STAGE 3: apply the agents' actions in the environment
@@ -348,7 +507,7 @@ class Tester(object):
         while not self.env.goals_completed():
             self.env.step()
 
-            print(self.env)
+            # print(self.env)
 
             time.sleep(Tester.DELAY)
 
