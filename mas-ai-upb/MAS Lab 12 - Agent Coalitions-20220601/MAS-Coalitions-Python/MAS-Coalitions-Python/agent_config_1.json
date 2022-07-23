@@ -1,0 +1,26 @@
+[
+    {
+        "agent": {
+            "name": "Ag1",
+            "resources": 5
+        }
+    },
+    {
+        "agent": {
+            "name": "Ag2",
+            "resources": 3
+        }
+    },
+    {
+        "agent": {
+            "name": "Ag3",
+            "resources": 4
+        }
+    },
+    {
+        "agent": {
+            "name": "Ag4",
+            "resources": 4
+        }
+    }
+]

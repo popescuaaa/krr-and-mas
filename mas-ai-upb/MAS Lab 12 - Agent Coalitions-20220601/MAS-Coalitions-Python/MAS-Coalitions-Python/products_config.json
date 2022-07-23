@@ -1,0 +1,38 @@
+[
+    {
+        "product": {
+            "type": "r1",
+            "value": 500,
+            "price": 7
+        }
+    },
+    
+    {
+        "product": {
+            "type": "r1",
+            "value": 750,
+            "price": 9
+        }
+    },
+    {
+        "product": {
+            "type": "r1",
+            "value": 1000,
+            "price": 11
+        }
+    },
+    {
+        "product": {
+            "type": "r2",
+            "value": 300,
+            "price": 4
+        }
+    },
+    {
+        "product": {
+            "type": "r2",
+            "value": 600,
+            "price": 8
+        }
+    }
+]
